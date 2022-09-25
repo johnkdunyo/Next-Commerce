@@ -1,8 +1,19 @@
 import Head from "next/head";
 import Link from "next/link";
-import React from "react";
+import React, { useContext, useState, useEffect } from "react";
+import { Store } from "../utils/Store";
 
 const Layout = ({ children, title }) => {
+  const { state, dispatch } = useContext(Store);
+  const { cart } = state;
+
+  const [cartItemsCount, setCartItemsCount] = useState(0);
+  useEffect(() => {
+    setCartItemsCount(cart.cartItems.reduce((a, c) => a + c.quantity, 0));
+  }, [cart.cartItems]);
+
+  console.log(cart);
+
   return (
     <React.Fragment>
       <Head>
@@ -19,7 +30,12 @@ const Layout = ({ children, title }) => {
             <div className="space-x-5 font-bold">
               <Link href="/cart">
                 <button className="px-2 py-1.5 hover:bg-gray-200 rounded-md">
-                  Cart
+                  Cart{" "}
+                  {cartItemsCount > 0 && (
+                    <span className="ml-1 rounded-full bg-red-600 px-2 py-1 text-xs font-bold text-white">
+                      {cartItemsCount}
+                    </span>
+                  )}
                 </button>
               </Link>
               <Link href="/login">

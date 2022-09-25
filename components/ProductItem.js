@@ -1,8 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useContext } from "react";
+import { Store } from "../utils/Store";
 
 const ProductItem = ({ product }) => {
+  const { state, dispatch } = useContext(Store);
   return (
     <React.Fragment>
       <div className="card">
@@ -26,7 +28,16 @@ const ProductItem = ({ product }) => {
           </Link>
           <p className="mb-2">{product.brand}</p>
           <p className="mb-2">${product.price}</p>
-          <button className="primary-button" type="button">
+          <button
+            className="primary-button"
+            type="button"
+            onClick={() =>
+              dispatch({
+                type: "CART_ADD_ITEM",
+                payload: { ...product, quantity: 1 },
+              })
+            }
+          >
             Add to Cart
           </button>
         </div>
